@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.1.0, for macos13 (x86_64)
+-- MySQL dump 10.13  Distrib 8.1.0, for macos13.3 (x86_64)
 --
 -- Host: localhost    Database: weekendwizdb
 -- ------------------------------------------------------
@@ -23,8 +23,9 @@ DROP TABLE IF EXISTS `calendarinfo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `calendarinfo` (
-  `calendarid` int DEFAULT NULL,
-  `calendartitle` varchar(255) DEFAULT NULL
+  `calendarid` int NOT NULL,
+  `calendartitle` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`calendarid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -45,12 +46,15 @@ DROP TABLE IF EXISTS `eventinfo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `eventinfo` (
-  `eventname` varchar(255) DEFAULT NULL,
+  `eventname` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   `time` datetime DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
   `budget` double DEFAULT NULL,
-  `calendarid` varchar(255) DEFAULT NULL
+  `calendarid` int NOT NULL,
+  PRIMARY KEY (`eventname`,`calendarid`),
+  KEY `calendarid` (`calendarid`),
+  CONSTRAINT `eventinfo_ibfk_1` FOREIGN KEY (`calendarid`) REFERENCES `calendarinfo` (`calendarid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -71,8 +75,11 @@ DROP TABLE IF EXISTS `friendinfo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `friendinfo` (
-  `userid` int DEFAULT NULL,
-  `friendid` int DEFAULT NULL
+  `userid` int NOT NULL,
+  `friendid` int NOT NULL,
+  PRIMARY KEY (`friendid`,`userid`),
+  KEY `userid` (`userid`),
+  CONSTRAINT `friendinfo_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `userinfo` (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -94,8 +101,11 @@ DROP TABLE IF EXISTS `logininfo`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `logininfo` (
   `userid` int DEFAULT NULL,
-  `username` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`username`),
+  KEY `userid` (`userid`),
+  CONSTRAINT `logininfo_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `userinfo` (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -116,9 +126,11 @@ DROP TABLE IF EXISTS `modifypermission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `modifypermission` (
-  `eventname` varchar(255) DEFAULT NULL,
-  `accesstype` varchar(255) DEFAULT NULL,
-  `friendid` int DEFAULT NULL
+  `eventname` varchar(255) NOT NULL,
+  `accesstype` varchar(255) NOT NULL,
+  `friendid` int NOT NULL,
+  PRIMARY KEY (`eventname`,`friendid`,`accesstype`),
+  CONSTRAINT `modifypermission_ibfk_1` FOREIGN KEY (`eventname`) REFERENCES `eventinfo` (`eventname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -139,8 +151,11 @@ DROP TABLE IF EXISTS `participantinfo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `participantinfo` (
-  `eventname` varchar(255) DEFAULT NULL,
-  `partcipantionid` int DEFAULT NULL
+  `eventname` varchar(255) NOT NULL,
+  `friendid` int NOT NULL,
+  PRIMARY KEY (`friendid`,`eventname`),
+  KEY `eventname` (`eventname`),
+  CONSTRAINT `participantinfo_ibfk_1` FOREIGN KEY (`eventname`) REFERENCES `eventinfo` (`eventname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -161,10 +176,14 @@ DROP TABLE IF EXISTS `taskinfo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `taskinfo` (
-  `taskname` varchar(255) DEFAULT NULL,
+  `taskname` varchar(255) NOT NULL,
   `taskdescription` varchar(255) DEFAULT NULL,
   `duetime` datetime DEFAULT NULL,
-  `calendarid` int DEFAULT NULL
+  `calendarid` int NOT NULL,
+  PRIMARY KEY (`taskname`,`calendarid`),
+  KEY `calendarid` (`calendarid`),
+  CONSTRAINT `taskinfo_ibfk_1` FOREIGN KEY (`calendarid`) REFERENCES `calendarinfo` (`calendarid`),
+  CONSTRAINT `taskinfo_ibfk_2` FOREIGN KEY (`calendarid`) REFERENCES `calendarinfo` (`calendarid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -185,10 +204,13 @@ DROP TABLE IF EXISTS `userinfo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `userinfo` (
-  `userid` int DEFAULT NULL,
+  `userid` int NOT NULL,
   `calendarid` int DEFAULT NULL,
   `firstname` varchar(255) DEFAULT NULL,
-  `lastname` varchar(255) DEFAULT NULL
+  `lastname` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`userid`),
+  KEY `calendarid` (`calendarid`),
+  CONSTRAINT `userinfo_ibfk_1` FOREIGN KEY (`calendarid`) REFERENCES `calendarinfo` (`calendarid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -209,9 +231,11 @@ DROP TABLE IF EXISTS `viewpermission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `viewpermission` (
-  `calendarid` int DEFAULT NULL,
-  `accesstype` varchar(255) DEFAULT NULL,
-  `friendid` int DEFAULT NULL
+  `calendarid` int NOT NULL,
+  `accesstype` varchar(255) NOT NULL,
+  `friendid` int NOT NULL,
+  PRIMARY KEY (`calendarid`,`friendid`,`accesstype`),
+  CONSTRAINT `viewpermission_ibfk_1` FOREIGN KEY (`calendarid`) REFERENCES `calendarinfo` (`calendarid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -233,4 +257,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-26 22:54:08
+-- Dump completed on 2023-11-02 23:17:51
