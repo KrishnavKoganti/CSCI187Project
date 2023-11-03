@@ -5,6 +5,8 @@ import {
   getAuth,
   signInWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -13,6 +15,7 @@ import {
 const firebaseConfig = {
   apiKey: "AIzaSyAUYQOOL7F-srIpfX6XzTbqJVYj9-3kJlQ",
   authDomain: "csci187-dc2c5.firebaseapp.com",
+  databaseURL:"https://csci187-dc2c5-default-rtdb.firebaseio.com/",
   projectId: "csci187-dc2c5",
   storageBucket: "csci187-dc2c5.appspot.com",
   messagingSenderId: "840610892835",
@@ -36,15 +39,12 @@ window.login= function(e) {
   signInWithEmailAndPassword(auth, obj.email, obj.password)
     .then(function (success) {
       alert("logined Successfully")
-      var aaaa =  (success.user.uid);
-      localStorage.setItem("uid",aaaa)
-      console.log(aaaa)
-      
-      
-      
-      window.location.replace('UserPage.html')
-     // localStorage.setItem(success,user,uid)
-      
+     const userId = auth.currentUser.uid;
+      localStorage.setItem("userId", userId);
+      console.log(userId);
+    setTimeout(function() {
+      window.location.replace('UserPage.html');
+    }, 2000);
     })
     .catch(function (err) {
       alert("login error"+err);

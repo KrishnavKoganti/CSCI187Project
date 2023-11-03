@@ -83,7 +83,7 @@ li {
           <h1>Hello <span id="user"> </span> <span class="text">Send Your Data !</span></h1>
       </div>
       <div class="main">
-          <form action="#">
+          <form id="myForm">
               <div>
                   <input type="text" id="Name" placeholder="Name" >
                   <br>
@@ -91,8 +91,8 @@ li {
                   <br>
                   <input type="text" id="Status" placeholder="Status">
                   <br>
-                  <input type="submit" value="Add" class="btn" onclick="sendtodo()" id="sibtn">
-                  <input type="submit" value="Get data" class="btn" onclick="getdata()" id="sibtn">
+                  <input type="button" value="Add" class="btn" id="submitBtn">
+                <input type="button" value="Get data" class="btn"  id="getDataBtn">
               </div>
           </form>
       </div>
@@ -100,5 +100,22 @@ li {
           <ul id="parent"></ul>
       </div>
 </body>
-<script src="/JAVASCRIPT/user.js" type="module"></script>
+<script src="../JAVASCRIPT/user.js" ></script>
+<script type="module">
+  import { sendtodo } from '../JAVASCRIPT/user.js';
+
+  window.onload = function() {
+      document.getElementById('submitBtn').addEventListener('click', function(e){
+        e.preventDefault();
+        sendtodo();
+      });
+      document.getElementById('getDataBtn').addEventListener('click', function(e){
+        e.preventDefault();
+        renderData();
+      });
+      
+      // document.getElementById('getDataBtn').addEventListener('submit', renderData());
+
+  }
+</script>
 </html>

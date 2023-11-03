@@ -8,8 +8,6 @@ import {
     signOut,
     onAuthStateChanged,
   } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
 
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -32,64 +30,104 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth();
 const database = getDatabase();
-const db = getFirestore(app);
-
 
 var inp = document.getElementById("Name")
 var descri= document.getElementById("Description") 
 var status = document.getElementById("Status")
 
 
-window.sendtodo = function () {
-    var obj = {
-        task: inp.value,
-        description:descri.value,
-        status:status.value,
-        uid:localStorage.getItem("uid")
-    };
-       if(obj.task=="",obj.description=="",obj.status==""){
-        alert("All Fields Are Requried")
-        return false
-       }
-       else{
+export function sendtodo() {
+  var task = document.getElementById("Name");
+  var description = document.getElementById("Description");
+  var status = document.getElementById("Status");
 
-    const keyRef = ref(database, 'todotask','Users')
-    obj.id=push(keyRef).key;
-    const refrences = ref(database, `todotask/${obj.id}/`);
-    // const sab =  localStorage.setItem()
-    // console.log(sab)
-      db.collection("users").add({
-          first: "Ada",
-          last: "Lovelace",
-          born: 1815
-      })
-      .then((docRef) => {
-          console.log("Document written with ID: ", docRef.id);
-      })
-      .catch((error) => {
-          console.error("Error adding document: ", error);
-      });
+  if(task.value == "" || description.value == "" || status.value == ""){
+    alert("All Fields Are Required");
+    return false;
+  }
 
+  var userId = localStorage.getItem("userId");
+  console.log("User ID: ", userId); // Debugging line
 
-    set(refrences,obj)
-        console.log(obj.id)
-        console.log(obj)
-        alert("data addded")
+  var obj = {
+    task: task.value,
+    description: description.value,
+    status: status.value,
+    userId: localStorage.getItem("userId")
+  };
 
+  writeTaskData(obj.userId, obj.task, obj.description, obj.status);
 }
+
+function writeTaskData(userId, task, description, status) {
+  const taskRef = ref(database, 'users/' + userId + '/tasks');
+  const newTaskRef = push(taskRef);
+
+  set(newTaskRef, {
+    task: task,
+    description: description,
+    status: status
+  })
+  .then(() => {
+    console.log("Data written successfully");
+    alert("Data added");
+  })
+  .catch((error) => {
+    console.error("Error writing data: ", error);
+  });
 }
-var list = []
-function renderData(){
-    const refrences = ref(database, `todotask/`);
-    var parent = document.getElementById('parent')
-    parent.innerHTML = "";
-    for(var i=0;  i<list.length; i++ ){
-      // console.log(list[i].uid)
-        if(list[i].uid==localStorage.getItem("uid")){
-          parent.innerHTML += `<ul><li id=${list[i].id}>Name : ${list[i].task}</br><li id=${list[i].id}>Description:${list[i].description}</br><li id=${list[i].id}>Status:${list[i].status}</br><button onclick="delTask(this)" id="del">${"Delete"}</button><button onclick="editask(this)" id="edit">${"Edit"}</button></li></ul>`;
-        }
+
+// window.onload = function() {
+//   document.getElementById('submitBtn').addEventListener('click', function(e){
+//     e.preventDefault();
+//     sendtodo();
+//   });
+//   document.getElementById('submitBtn').addEventListener('click', function(e){
+//     e.preventDefault();
+//     renderData();
+//   });
+
+
+// }
+
+
+export function renderData(){
+  console.log("User ID: ", userId); // Debugging line
+  var userId = localStorage.getItem("userId");
+  getTasks(userId);
+}
+
+
+function getTasks(userId) {
+  const taskRef = ref(database, 'users/' + userId + '/tasks');
+  
+  get(child(taskRef, '/')).then((snapshot) => {
+    if (snapshot.exists()) {
+      console.log(snapshot.val());
+    } else {
+      console.log("No data available");
     }
+  }).catch((error) => {
+    console.error(error);
+  });
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 "user"
 var un = [];
 function username(){
