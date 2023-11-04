@@ -31,17 +31,14 @@ const analytics = getAnalytics(app);
 const auth = getAuth();
 const database = getDatabase();
 
-var inp = document.getElementById("Name")
-var descri= document.getElementById("Description") 
-var status = document.getElementById("Status")
+export function createEvent() {
+  var eventTitle = document.getElementById("eventTitle");
+  var startTime = document.getElementById("startTime");
+  var endTime = document.getElementById("endTime");
+  var location = document.getElementById("location");
+  var description = document.getElementById("description");
 
-
-export function sendtodo() {
-  var task = document.getElementById("Name");
-  var description = document.getElementById("Description");
-  var status = document.getElementById("Status");
-
-  if(task.value == "" || description.value == "" || status.value == ""){
+  if(eventTitle.value == "" || startTime.value == "" || endTime.value == ""|| location.value == ""|| description.value == ""){
     alert("All Fields Are Required");
     return false;
   }
@@ -49,24 +46,28 @@ export function sendtodo() {
   var userId = localStorage.getItem("userId");
   console.log("User ID: ", userId); // Debugging line
 
-  var obj = {
-    task: task.value,
+  var event = {
+    title: eventTitle.value,
+    start: startTime.value,
+    end: endTime.value,
+    location: location.value,
     description: description.value,
-    status: status.value,
     userId: localStorage.getItem("userId")
   };
-
-  writeTaskData(obj.userId, obj.task, obj.description, obj.status);
+  console.log("Event details: ", event);
+  writeEventData(event.userId, event.title, event.start, event.end, event.location, event.description)
 }
 
-function writeTaskData(userId, task, description, status) {
-  const taskRef = ref(database, 'users/' + userId + '/tasks');
-  const newTaskRef = push(taskRef);
+function writeEventData(userId, eventTitle, startTime, endTime, location, description) {
+  const eventRef = ref(database, 'users/' + userId + '/events');
+  const newEventRef = push(eventRef);
 
-  set(newTaskRef, {
-    task: task,
-    description: description,
-    status: status
+  set(newEventRef, {
+    title: eventTitle,
+    start: startTime,
+    end: endTime,
+    location: location,
+    description: description
   })
   .then(() => {
     console.log("Data written successfully");
@@ -92,25 +93,33 @@ function writeTaskData(userId, task, description, status) {
 
 
 export function renderData(){
-  console.log("User ID: ", userId); // Debugging line
   var userId = localStorage.getItem("userId");
-  getTasks(userId);
+  console.log("User ID: ", userId); // Debugging line
+  
+  getEvents(userId);
 }
 
 
-function getTasks(userId) {
-  const taskRef = ref(database, 'users/' + userId + '/tasks');
-  
-  get(child(taskRef, '/')).then((snapshot) => {
+function getEvents(userId) {
+  const eventRef = ref(database, 'users/' + userId + '/events');
+
+  get(eventRef).then((snapshot) => {
     if (snapshot.exists()) {
-      console.log(snapshot.val());
+      const events = snapshot.val();
+      for (let eventId in events) {
+        console.log("Event ID: ", eventId);
+        console.log("Title: ", events[eventId].title);
+        console.log("Start Time: ", events[eventId].start);
+        console.log("End Time: ", events[eventId].end);
+        console.log("Location: ", events[eventId].location);
+        console.log("Description: ", events[eventId].description);
+      }
     } else {
       console.log("No data available");
     }
   }).catch((error) => {
     console.error(error);
   });
-
 }
 
 

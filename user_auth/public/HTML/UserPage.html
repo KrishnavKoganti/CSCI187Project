@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +16,20 @@
   width: 500px;
   padding: 10px;
   margin: auto;
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 300px; /* Adjust as needed */
+}
+
+.container label {
+  text-align: right;
+}
+
+.container input {
+  text-align: left;
 }
 input {
   padding: 10px;
@@ -83,18 +98,30 @@ li {
           <h1>Hello <span id="user"> </span> <span class="text">Send Your Data !</span></h1>
       </div>
       <div class="main">
+        <div class="container">
           <form id="myForm">
               <div>
-                  <input type="text" id="Name" placeholder="Name" >
+                  <label for="eventTitle">Event Title:</label>
+                  <input type="text" id="eventTitle" placeholder="Event Title" >
                   <br>
-                  <input type="text" id="Description" placeholder="Description">
+                  <label for="startTime">Start Time:</label>
+                  <input type="datetime-local" id="startTime">
                   <br>
-                  <input type="text" id="Status" placeholder="Status">
+                  <label for="endTime">End Time:</label>
+                  <input type="datetime-local" id="endTime">
                   <br>
-                  <input type="button" value="Add" class="btn" id="submitBtn">
+                  <label for="location">Location:</label>
+                  <input type="text" id="location" placeholder="Location">
+                  <br>
+                  <label for="description">Description:</label>
+                  <input type="text" id="description" placeholder="Description">
+                  <br>
+                  <label for="color">Color:</label>
+                  <input type="button" value="Create Event" class="btn" id="createEventBtn">
                 <input type="button" value="Get data" class="btn"  id="getDataBtn">
               </div>
           </form>
+        </div>
       </div>
       <div id="main">
           <ul id="parent"></ul>
@@ -102,19 +129,18 @@ li {
 </body>
 <script src="../JAVASCRIPT/user.js" ></script>
 <script type="module">
-  import { sendtodo } from '../JAVASCRIPT/user.js';
-
+  import { createEvent, renderData } from '../JAVASCRIPT/user.js';
+  
   window.onload = function() {
-      document.getElementById('submitBtn').addEventListener('click', function(e){
+      document.getElementById('createEventBtn').addEventListener('click', function(e){
         e.preventDefault();
-        sendtodo();
+        createEvent();
       });
       document.getElementById('getDataBtn').addEventListener('click', function(e){
         e.preventDefault();
         renderData();
       });
       
-      // document.getElementById('getDataBtn').addEventListener('submit', renderData());
 
   }
 </script>
