@@ -1,84 +1,30 @@
 <HTML>
-<head>
-    <title>Weekend Planner Login</title>
-
-    <style>
-        html {
-            height: 100%;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            background-color: rgb(69, 69, 69);
-        }
-
-        .top-nav {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            height: 10%;
-            background-color: rgba(113,212,86,255);
-        }
-
-        .top-nav > * {
-            margin: 2%
-        }
-
-        main {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            color: white;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin: 2%;
-        }
-
-        input {
-            margin-top: 5%;
-            height: 30%;
-        }
-
-        .logo {
-            border-radius: 50%;
-            width: 20%;
-        }
-    </style>
-
-</head>
-
-<body>
+    <head>
+        <title>Weekend Planner Login</title>
+        <link rel="stylesheet" type="text/css" href="./base.css">
+        <link rel="stylesheet" type="text/css" href="./account-pages.css">
+        
+    </head>
     
-    <nav class="top-nav">
-        <a href="#">Home</a>
-    </nav>
-
-    <main>
-        <!-- add logo to img -->
-        <img class="logo" src="./generic-calendar.png" /> 
-        <form>
-            <!-- <label for="fname">First name:</label> -->
-            <input type="text" id="username" value="username">
-            <!-- <label for="lname">Last name:</label> -->
-            <input type="text" id="password"  value="password">
-            <input type="submit" value="Log In">
-        </form> 
-        <p>Don't have an account? <a href="#">Click here</a> to create one</p>
-    </main>
-
-</body>
-
-
-</HTML>
+    <body>
+        
+        <nav class="top-nav">
+            <a class="link" href="#" style="color: rgb(69, 69, 69);">Home</a>
+        </nav>
+    
+        <main>
+            <!-- add logo to img -->
+            <img class="logo" src="./generic-calendar.png" /> 
+            <form>
+                <input type="text" id="username" placeholder="username">
+                <input type="text" id="password"  placeholder="password">
+                <input type="submit" placeholder="Log In">
+            </form> 
+            <a>Don't have an account?</a>
+            <a class="link" style="color: rgba(113,212,86,255);" href="./create-account.html">Click here to create one</a>
+        </main>
+    
+    </body>
+    
+    
+    </HTML>
