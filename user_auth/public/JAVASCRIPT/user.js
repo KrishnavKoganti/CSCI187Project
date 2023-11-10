@@ -95,7 +95,13 @@ function writeEventData(userId, eventTitle, startTime, endTime, location, descri
 export function renderData(){
   var userId = localStorage.getItem("userId");
   console.log("User ID: ", userId); // Debugging line
-  
+  // newly added
+
+  setTimeout(function() {
+    window.location.replace('calendar.html');
+  }, 2000);
+  // end of newly added
+
   getEvents(userId);
 }
 
