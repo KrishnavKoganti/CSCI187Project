@@ -1,0 +1,134 @@
+<html>
+<head>
+    <title>Notification Preferences</title>
+    <link rel="stylesheet" type="text/css" href="./base.css">
+    <link rel="stylesheet" type="text/css" href="./notification-preference.css">
+</head>
+
+<body>
+    <main>
+        <h1>Notification Preferences</h1>
+        <h2>Event Notifications</h2>
+        <section>
+          <form>
+            <label for="event occurrence">Occurrence: </label>
+            <select name="event occurrence" id="event occurrence">
+              <option value="at time of event">At Time of Event</option>
+              <option value="5 minutes before">5 minutes before</option>
+              <option value="10 minutes before">10 minutes before</option>
+              <option value="30 minutes before">30 minutes before</option>
+              <option value="1 hour before">1 hour before</option>
+              <option value="1 day before">1 day before</option>
+              <option value="1 week before">1 week before</option>
+            </select>
+          </form>
+        </section>
+
+        <section>
+          <form>
+            <p>Custom Event Notification: </p>
+            <input type="text" id="number" placeholder="">
+            <label for="frequency">Frequency:</label>
+            <select name="frequency" id="frequency">
+              <option value="minutes before">minutes before</option>
+              <option value="hours before">hours before</option>
+              <option value="days before">days before</option>
+              <option value="weeks before">weeks before</option>
+              <option value="at time of event">time of event</option>
+            </select>
+          </form>
+        </section>
+
+        <h2>Task Notifications</h2>
+
+        <section>
+          <form>
+            <label for="task occurrence">Occurrence: </label>
+            <select name="task occurrence" id="task occurrence">
+              <option value="at time of event">At Time of Event</option>
+              <option value="5 minutes before">5 minutes before</option>
+              <option value="10 minutes before">10 minutes before</option>
+              <option value="30 minutes before">30 minutes before</option>
+              <option value="1 hour before">1 hour before</option>
+              <option value="1 day before">1 day before</option>
+              <option value="1 week before">1 week before</option>
+            </select>
+          </form>
+        </section>
+
+        <section>
+          <form>
+            <p>Custom Task Notification: </p>
+            <input type="text" id="number" placeholder="">
+            <label for="frequency">Frequency: </label>
+            <select name="frequency" id="frequency">
+              <option value="minutes before">minutes before</option>
+              <option value="hours before">hours before</option>
+              <option value="days before">days before</option>
+              <option value="weeks before">weeks before</option>
+              <option value="at time of event">time of event</option>
+            </select>
+          </form>
+        </section>
+
+        <h2>General Notifications</h2>
+
+        <section>
+          <form>
+            <label for="new events/tasks">New Events/Tasks: </label>
+            <select name="new events/tasks" id="new events/tasks">
+              <option value="email">Email</option>
+              <option value="text message">Text Message</option>
+              <option value="push notification">Push Notifications</option>
+            </select>
+          </form>
+        </section>
+
+        <section>
+          <form>
+            <label for="cancelled events/tasks">Cancelled Events/Tasks: </label>
+            <select name="cancelled events/tasks" id="cancelled events/tasks">
+              <option value="email">Email</option>
+              <option value="text message">Text Message</option>
+              <option value="push notification">Push Notifications</option>
+            </select>
+          </form>
+        </section>
+
+        <section>
+          <form>
+            <label for="changed events/tasks">Changed Events/Tasks: </label>
+            <select name="changed events/tasks" id="changed events/tasks">
+              <option value="email">Email</option>
+              <option value="text message">Text Message</option>
+              <option value="push notification">Push Notifications</option>
+            </select>
+          </form>
+        </section>
+
+        <section>
+          <form>
+            <label for="daily events/tasks">Daily Events/Tasks: </label>
+            <select name="daily events/tasks" id="daily events/tasks">
+              <option value="email">Email</option>
+              <option value="text message">Text Message</option>
+              <option value="push notification">Push Notifications</option>
+            </select>
+          </form>
+        </section>
+
+        <section>
+          <form>
+            <button type="button">Save Notifications</button>
+          </form>
+        </section>
+
+      <!-- This is how to make a button to link to another page
+      <a href="./">
+        link
+      </a>
+    -->
+    </main>
+</body>
+
+</html>
