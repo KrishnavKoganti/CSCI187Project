@@ -1,0 +1,11 @@
+.aParent div {
+    float: left;
+    clear: none; 
+    margin-left: 20px;
+}
+
+.title {
+    margin-left: 20px;
+}
+
+label { display: block; width: 200px; }
