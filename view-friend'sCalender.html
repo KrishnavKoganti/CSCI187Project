@@ -1,0 +1,85 @@
+<HTML>
+  <head>
+    <link rel="stylesheet" type="text/css" href="./base.css">
+    <link rel="stylesheet" type="text/css" href="./view-friend'sCalendar.css">
+    <h2>View <input type="text" id="friend1" name="friend1" placeholder="" readonly>'s Calendar </h2> 
+    <title>Calendar</title>
+  </head>
+
+  <body>
+    <div id="calendar-container"></div>
+    <div id="tasks-container"></div>
+
+    <div class="tasks">
+      <h2>Today's Tasks</h2>
+      <input type="text" id="task1" name="task1" placeholder="" readonly><br><br>
+      <input type="text" id="task2" name="task2" placeholder="" readonly><br><br>
+      <input type="text" id="task3" name="task3" placeholder="" readonly><br><br>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        // Get the current date
+        const currentDate = new Date();
+        const currentDay = currentDate.getDate();
+        
+        // Get the container for the calendar
+        const calendarContainer = document.getElementById("calendar-container");
+        
+        // Get the container for the tasks
+        const tasksContainer = document.getElementById("tasks-container");
+        
+        // Days of the week
+        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        
+        // Sample tasks for each day (replace with your actual data)
+        const tasks = {
+          1: ["Task 1", "Task 2"],
+          2: ["Task 3"],
+          // Add tasks for other days as needed
+        };
+
+        // Loop through the days of the week
+        for (let i = 0; i < daysOfWeek.length; i++) {
+          const dayElement = document.createElement("div");
+          dayElement.classList.add("day");
+          dayElement.textContent = daysOfWeek[i];
+          calendarContainer.appendChild(dayElement);
+        }
+
+        // Loop through the days of the month
+        for (let day = 1; day <= 31; day++) {
+          const dayElement = document.createElement("div");
+          dayElement.classList.add("day");
+          
+          if (day === currentDay) {
+            dayElement.classList.add("current-day");
+          }
+          
+          dayElement.textContent = day;
+          
+          // Display tasks for the day
+          if (tasks[day]) {
+            dayElement.addEventListener("click", function() {
+              // Clear previous tasks
+              tasksContainer.innerHTML = "";
+              
+              // Display tasks for the clicked day
+              const tasksList = document.createElement("ul");
+              tasks[day].forEach(task => {
+                const taskItem = document.createElement("li");
+                taskItem.textContent = task;
+                tasksList.appendChild(taskItem);
+              });
+              
+              tasksContainer.appendChild(tasksList);
+            });
+          }
+          
+          calendarContainer.appendChild(dayElement);
+        }
+      });
+    </script>
+
+  </body>
+</HTML>

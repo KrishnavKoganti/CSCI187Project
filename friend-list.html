@@ -1,34 +1,71 @@
 <HTML>
     <head>
         <title>Friend List</title>
-        <!-- <link rel="stylesheet" type="text/css" href="./base.css"> -->
+        <link rel="stylesheet" type="text/css" href="./base.css">
         <link rel="stylesheet" type="text/css" href="./friend-list.css">
     </head>
 
-    <div class="title">
-        <h2>Friends</h2>
-        <h3>All Friends</h3>
-    </div>
-
-    <div class="aParent">
-        <div>
-            <input type="text" id="friend1" name="friend1" placeholder="" readonly><br><br>
-            <input type="text" id="friend2" name="friend2" placeholder="" readonly><br><br>
-            <input type="text" id="friend3" name="friend3" placeholder="" readonly><br><br>
-            <input type="text" id="friend4" name="friend4" placeholder="" readonly><br><br>
-            <input type="text" id="friend5" name="friend5" placeholder="" readonly><br><br>
-            <input type="text" id="friend6" name="friend6" placeholder="" readonly><br><br>
+    <body>
+        <div class="title">
+            <h2>Friends</h2>
+            <h3>All Friends</h3>
+        </div>
         
+        <div class="friends">
+            <ul id="friend-list"></ul>
         </div>
 
-        <div>
-            <input type="text" placeholder="Search.."><br><br>
-            <input type="text" id="friend1" name="friend1" placeholder="" readonly>
-            <button id="follow-button">+ Follow</button><br><br>
-            <input type="text" id="friend1" name="friend1" placeholder="" readonly>
-            <button id="follow-button">+ Follow</button><br><br>
-            <input type="text" id="friend1" name="friend1" placeholder="" readonly>
-            <button id="follow-button">+ Follow</button><br><br>
+        <div class="search-bar">
+            <input type="text" id="search-bar-input" placeholder="Search.."><br><br>
+            <div id="friend-input-container">
+            <button onclick="addFriend()">+ Follow</button>
+            </div>
         </div>
-    </div>
+        <script>
+            // Sample data for friends
+            var friends = [
+                { name: 'John' },
+                { name: 'Jane' },
+                { name: 'Bob' },
+            ];
+        
+            // Function to render the friend list
+            function renderFriendList() {
+                var friendList = document.getElementById('friend-list');
+                friendList.innerHTML = ''; // Clear the list
+        
+                // Loop through each friend and create list items
+                friends.forEach(function (friend) {
+                    var listItem = document.createElement('li');
+                    listItem.textContent = `${friend.name}`;
+        
+                    // Append the list item to the friend list
+                    friendList.appendChild(listItem);
+                });
+            }
+        
+            // Initial render
+            renderFriendList();
+        
+            function filterFriends() {
+            var searchTerm = document.getElementById('search-bar').value.toLowerCase();
+            var filteredFriends = friends.filter(function (friend) {
+                return friend.name.toLowerCase().includes(searchTerm);
+            });
+
+            // Update the friend list with the filtered results
+            renderFriendList(filteredFriends);
+        }
+
+        // Event listener for the search input
+        document.getElementById('search-bar').addEventListener('input', filterFriends);
+
+        // Function to add a friend dynamically
+        function addFriend() {
+           
+    
+            filterFriends(); // Update the friend list based on the search input
+        }
+    </script>
+    </body>
 </HTML> 
