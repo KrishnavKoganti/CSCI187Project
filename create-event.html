@@ -1,0 +1,92 @@
+<html>
+<head>
+    <title>Create an Event</title>
+    <link rel="stylesheet" type="text/css" href="./base.css">
+    <link rel="stylesheet" type="text/css" href="./create-event.css">
+</head>
+
+<body>
+    <main>
+        <h1>Add an Event</h1>
+        <section>
+            <form>
+                <img src="./images/add-icon.png"/>
+                <input class="option" type="text" id="event-title" placeholder="Event Title">
+            </form>
+        </section>
+
+        <section>
+            <form>
+                <img src="./images/calendar.png"/>
+                <input class="option" type="date" id="date" min="2023-11-01" max="2024-12-31">
+            </form>
+
+            <!-- add all day check box option -->
+
+        </section>
+
+        <section>
+            <form>
+                <img src="./images/clock.png"/>
+                <input class="option" type="time" id="start-time" min="00:00" max="23:59">
+            
+                <a>Until</a>
+                <input class="option" type="time" id="end-time" min="00:00" max="23:59">
+            </form>
+        </section>
+
+        <section>
+            <form>
+                <img src="./images/notification.png"/>
+                <div class="option" id="notification">
+                    <a><input type="checkbox" name="notification" value="email">Email</a>
+                    <a><input type="checkbox" name="notification" value="text">Text</a>
+                    <a><input type="checkbox" name="notification" value="push">Push</a>
+                </div>
+            </form>
+       
+            <form>
+                <img src="./images/priority.jpg"/>
+                <select class="option" id="priority">
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+            </form>
+        </section>
+
+        <section>
+            <form>
+                <img src="./images/location.png"/>
+                <input class="option" type="text" id="location" placeholder="Location">
+            </form>
+        
+            <form>
+                <img src="./images/travel.png"/>
+                <select class="option" id="transportation">
+                    <option value="walking">Walking</option>
+                    <option value="driving">Driving</option>
+                    <option value="public-transit">Public Transit</option>
+                </select>
+            </form>
+        </section>
+
+<!--
+        <section>
+            <form>
+                <img src="./images/invite-friends.png"/>
+                <input class="option" type="text" id="email" placeholder="email">
+            </form>
+        </section>
+-->
+
+        <section>
+            <form>
+                <input type="text" id="additional-notes" placeholder="Additional notes">
+            </form>
+        </section>
+
+    </main>
+</body>
+
+</html>
