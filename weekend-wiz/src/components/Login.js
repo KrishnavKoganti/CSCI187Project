@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { auth, logInWithEmailAndPassword, signInWithGoogle } from "./firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import calendarIcon from './generic-calendar.png';
+import calendarIcon from "./generic-calendar.png";
 
 import "./Login.css";
 function Login() {
@@ -12,7 +12,6 @@ function Login() {
   const navigate = useNavigate();
   useEffect(() => {
     if (loading) {
-      // maybe trigger a loading screen
       return;
     }
     if (user) navigate("/dashboard");
@@ -20,8 +19,8 @@ function Login() {
   return (
     <div className="login">
       <div className="login__container">
-      <img src={calendarIcon} alt="Calendar" className="calendar-icon" />
-      <h2>Login</h2>
+        <img src={calendarIcon} alt="Calendar" className="calendar-icon" />
+        <h2>Login</h2>
         <input
           type="text"
           className="login__textBox"

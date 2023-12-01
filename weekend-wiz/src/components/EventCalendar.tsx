@@ -1,11 +1,12 @@
-import { useState, MouseEvent,useEffect } from "react"
+// Imports:
+import { useState, MouseEvent, useEffect } from "react"
 import { Box, Button, ButtonGroup, Card, CardContent, CardHeader, Container, Divider } from "@mui/material"
-import { auth, db } from './firebase'; 
+import { auth, db } from './firebase';
 import { collection, addDoc, getDocs, query, where, doc, deleteDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, type Event, dateFnsLocalizer } from "react-big-calendar"
-
+//data functions and locales
 import format from "date-fns/format"
 import parse from "date-fns/parse"
 import startOfWeek from "date-fns/startOfWeek"
@@ -13,25 +14,26 @@ import getDay from "date-fns/getDay"
 import enUS from "date-fns/locale/en-US"
 
 import "react-big-calendar/lib/css/react-big-calendar.css"
-
+//components
 import EventInfo from "./EventInfo"
 import AddEventModal from "./AddEventModal"
 import EventInfoModal from "./EventInfoModal"
 import { AddTodoModal } from "./AddTodoModal"
 import AddDatePickerEventModal from "./AddDatePickerEventModal"
 
+
 const locales = {
   "en-US": enUS,
 }
-
+//Intialize localizer with date-fns
 const localizer = dateFnsLocalizer({
   format,
   parse,
   startOfWeek,
   getDay,
   locales,
-}) 
-
+})
+//Define interfaces for events and todos
 export interface ITodo {
   _id: string
   title: string
@@ -56,7 +58,7 @@ export interface DatePickerEventFormData {
   start?: Date
   end?: Date
 }
-
+//Generate random ID for events
 export const generateId = () => (Math.floor(Math.random() * 10000) + 1).toString()
 
 const initialEventFormState: EventFormData = {
@@ -73,71 +75,75 @@ const initialDatePickerEventFormData: DatePickerEventFormData = {
 }
 
 const EventCalendar = () => {
-    const fetchEvents = async () => {
-        if (!auth.currentUser?.uid) {
-            console.log('User not authenticated');
-            return;
-          }
-      const q = query(collection(db, 'events'), where('userId', '==', auth.currentUser?.uid));
-      const querySnapshot = await getDocs(q);
-      const events = querySnapshot.docs.map(doc => {
-        const data = doc.data();
-        let endDate;
-        if (typeof data.end === 'number') {
-          // Unix timestamp in milliseconds
-          endDate = new Date(data.end);
-        } else if (data.end.seconds) {
-          // Firestore-like Timestamp
-          endDate = new Date(data.end.seconds * 1000);
-        } else {
-          console.error('Unexpected type for data.end:', typeof data.end);
-        }
-        return {
-          _id: data._id,
-          description: data.description,
-          start: data.start.toDate(),
-          end: endDate,
-          // add other properties here if needed
-        };
-      });
-      setEvents(events);
-    };
-    
-    useEffect(() => {
-        
-        
-    
-        fetchEvents();
-      }, [auth.currentUser?.uid]);
+  //Fetch events from firebase
+  const fetchEvents = async () => {
+    // Check if the user is authenticated
+    if (!auth.currentUser?.uid) {
+      console.log('User not authenticated');
+      return;
+    }
+    const q = query(collection(db, 'events'), where('userId', '==', auth.currentUser?.uid));
+    const querySnapshot = await getDocs(q);
+    const events = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      let endDate;
+      if (typeof data.end === 'number') {
+        // Unix timestamp in milliseconds
+        endDate = new Date(data.end);
+      } else if (data.end.seconds) {
+        // Firestore-like Timestamp
+        endDate = new Date(data.end.seconds * 1000);
+      } else {
+        console.error('Unexpected type for data.end:', typeof data.end);
+      }
+      return {
+        _id: data._id,
+        description: data.description,
+        start: data.start.toDate(),
+        end: endDate,
+      };
+    });
+    setEvents(events);
+  };
 
-      useEffect(() => {
-        fetchEvents();
-      }, []);
+  useEffect(() => {
 
-      useEffect(() => {
-        // Set up the auth state changed listener
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-          if (user) {
-            // User is signed in, fetch events
-            fetchEvents();
-          } else {
-            // User is signed out
-            console.log('User not authenticated');
-          }
-        });
-      
-        // Clean up the listener when the component is unmounted
-        return unsubscribe;
-      }, []);
-      
-      
+
+
+    fetchEvents();
+  }, [auth.currentUser?.uid]);
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  useEffect(() => {
+    // Set up the auth state changed listener
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, fetch events
+        fetchEvents();
+      } else {
+        // User is signed out
+        console.log('User not authenticated');
+      }
+    });
+
+    // Clean up the listener when the component is unmounted
+    return unsubscribe;
+  }, []);
+
+  //State for weather the slot is open or not
   const [openSlot, setOpenSlot] = useState(false)
+  //State for weather the datepicker is open or not
   const [openDatepickerModal, setOpenDatepickerModal] = useState(false)
+  //State for weather the todo modal is open or not
   const [openTodoModal, setOpenTodoModal] = useState(false)
+  //State for current event
   const [currentEvent, setCurrentEvent] = useState<Event | IEventInfo | null>(null)
-
+  //State for weather the event info modal is open or not
   const [eventInfoModal, setEventInfoModal] = useState(false)
-
+  //State for events and todos
   const [events, setEvents] = useState<IEventInfo[]>([])
   const [todos, setTodos] = useState<ITodo[]>([])
 
@@ -145,17 +151,17 @@ const EventCalendar = () => {
 
   const [datePickerEventFormData, setDatePickerEventFormData] =
     useState<DatePickerEventFormData>(initialDatePickerEventFormData)
-
+  //select slot function
   const handleSelectSlot = (event: Event) => {
     setOpenSlot(true)
     setCurrentEvent(event)
   }
-
+  //select event function
   const handleSelectEvent = (event: IEventInfo) => {
     setCurrentEvent(event)
     setEventInfoModal(true)
   }
-
+  //close event function
   const handleClose = () => {
     setEventFormData(initialEventFormState)
     setOpenSlot(false)
@@ -165,10 +171,10 @@ const EventCalendar = () => {
     setDatePickerEventFormData(initialDatePickerEventFormData)
     setOpenDatepickerModal(false)
   }
-
-   const onAddEvent = async (e: MouseEvent<HTMLButtonElement>) => {
+  //create event function
+  const onAddEvent = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-
+    //create event data
     const data: IEventInfo = {
       ...eventFormData,
       _id: generateId(),
@@ -177,28 +183,28 @@ const EventCalendar = () => {
       todoId: eventFormData.todoId || 'default',
     }
 
-  
-    
+
+    // Add the event to Firestore
     const docRef = await addDoc(collection(db, 'events'), {
-        ...data,
-        userId: auth.currentUser?.uid, // add the user's ID to the event data
-      });
-    
-      // Set the _id property to the ID of the document in Firestore
-      data._id = docRef.id;
-    
-      // Add the event to the local state
-      const newEvents = [...events, data]
-      setEvents(newEvents)
-    
-      console.log('Document written with ID: ', docRef.id);
-      handleClose();
-    }
-    
-    
-      
-    
-     
+      ...data,
+      userId: auth.currentUser?.uid, // add the user's ID to the event data
+    });
+
+    // Set the _id property to the ID of the document in Firestore
+    data._id = docRef.id;
+
+    // Add the event to the local state
+    const newEvents = [...events, data]
+    setEvents(newEvents)
+
+    console.log('Document written with ID: ', docRef.id);
+    handleClose();
+  }
+
+
+
+
+
 
 
 
@@ -206,23 +212,23 @@ const EventCalendar = () => {
     e.preventDefault()
 
     if (!datePickerEventFormData.start) {
-        alert('Please select a start date.');
-        return;
-      }
-        if (!datePickerEventFormData.allDay && !datePickerEventFormData.end) {
-            alert('Please select an end date.');
-            return;
-        }
+      alert('Please select a start date.');
+      return;
+    }
+    if (!datePickerEventFormData.allDay && !datePickerEventFormData.end) {
+      alert('Please select an end date.');
+      return;
+    }
     const addHours = (date: Date | undefined, hours: number) => {
       return date ? date.setHours(date.getHours() + hours) : undefined
     }
 
     const setMinToZero = (date: any) => {
       date.setSeconds(0)
- 
+
       return date
     }
-
+    //create event 
     const data: IEventInfo = {
       ...datePickerEventFormData,
       _id: generateId(),
@@ -230,38 +236,38 @@ const EventCalendar = () => {
       end: datePickerEventFormData.allDay
         ? addHours(datePickerEventFormData.start, 12)
         : setMinToZero(datePickerEventFormData.end),
-        todoId: datePickerEventFormData.todoId || 'default',
+      todoId: datePickerEventFormData.todoId || 'default',
     }
-    
+
     const newEvents = [...events, data]
 
     setEvents(newEvents)
     setDatePickerEventFormData(initialDatePickerEventFormData)
     try {
-        const docRef = await addDoc(collection(db, 'events'), {
-          ...data,
-          userId: auth.currentUser?.uid, // add the user's ID to the event data
-        });
-        console.log('Document written with ID: ', docRef.id);
-      } catch (e) {
-        console.error('Error adding document: ', e);
-      }
-    
-      handleDatePickerClose();
-    
-  }
+      const docRef = await addDoc(collection(db, 'events'), {
+        ...data,
+        userId: auth.currentUser?.uid, // add the user's ID to the event data
+      });
+      console.log('Document written with ID: ', docRef.id);
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    }
 
+    handleDatePickerClose();
+
+  }
+  //delete event
   const onDeleteEvent = async () => {
     const eventId = (currentEvent as IEventInfo)._id;
     console.log('Deleting event with ID:', eventId);
     if (!auth.currentUser?.uid) {
-        console.log('User ID not available');
-        return;
-      }
-  
+      console.log('User ID not available');
+      return;
+    }
+
     setEvents(() => [...events].filter((e) => e._id !== (currentEvent as IEventInfo)._id!))
     setEventInfoModal(false)
-  
+
     // Delete the event from Firestore
     const eventRef = doc(db, 'events', eventId);
     try {
@@ -282,8 +288,8 @@ const EventCalendar = () => {
     });
   };
 
- 
-  
+
+
 
   return (
     <Box
@@ -309,8 +315,8 @@ const EventCalendar = () => {
                   Create todo
                 </Button>
                 <Button onClick={logout} size="small" variant="contained">
-                Logout
-              </Button>
+                  Logout
+                </Button>
               </ButtonGroup>
             </Box>
             <Divider style={{ margin: 10 }} />
@@ -373,3 +379,6 @@ const EventCalendar = () => {
 }
 
 export default EventCalendar
+
+
+//Sources: https://github.com/Mumma6/react-calendar-example/tree/main
